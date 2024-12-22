@@ -419,3 +419,97 @@ An object representing the created captain record.
 
 **Error Handling:**
 If a required field is missing, the function will throw an error with the message `"All fields are required"`. Ensure all fields are provided before calling this function.
+
+### 2. Login a Captain
+
+**Endpoint:**
+```
+POST /api/captain/login
+```
+
+**Description:**
+Authenticates a captain using their email and password.
+
+**Request Body:**
+| Field   | Type   | Validation                          | Description                   |
+|---------|--------|--------------------------------------|-------------------------------|
+| `email` | String | Must be a valid email address       | Email of the captain          |
+| `password` | String | Minimum 6 characters              | Password for authentication   |
+
+**Example Response:**
+- Success:
+```json
+{
+  "token": "auth_token",
+  "captain": {
+    "id": "unique_captain_id",
+    "email": "captain@example.com"
+  }
+}
+```
+- Error:
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+---
+
+### 3. Get Captain Profile
+
+**Endpoint:**
+```
+GET /api/captain/profile
+```
+
+**Description:**
+Fetches the profile of the logged-in captain.
+
+**Headers:**
+| Field        | Description                 |
+|--------------|-----------------------------|
+| `Authorization` | Bearer token for authentication |
+
+**Example Response:**
+```json
+{
+  "id": "unique_captain_id",
+  "email": "captain@example.com",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "vehicle": {
+    "color": "Blue",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "Sedan"
+  }
+}
+```
+
+---
+
+### 4. Logout a Captain
+
+**Endpoint:**
+```
+POST /api/captain/logout
+```
+
+**Description:**
+Logs out the captain and invalidates their token.
+
+**Headers:**
+| Field        | Description                 |
+|--------------|-----------------------------|
+| `Authorization` | Bearer token for authentication |
+
+**Example Response:**
+- Success:
+```json
+{
+  "message": "Logout successfully"
+}
+```
