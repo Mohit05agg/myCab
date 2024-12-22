@@ -84,7 +84,6 @@ The following validation rules apply:
     }
   ]
 }
-```
 
 ---
 
@@ -166,7 +165,6 @@ The following validation rules apply:
 {
   "message": "Invalid email or password"
 }
-```
 
 ---
 
@@ -174,5 +172,122 @@ The following validation rules apply:
 - Ensure the `email` and `password` fields are correctly provided in the request body.
 - A JWT token is returned to authenticate the user for subsequent requests.
 - Include the `Authorization` header with the token for protected routes.
+
+---
+
+## /user/profile Endpoint
+
+### Description
+The `/user/profile` endpoint allows authenticated users to retrieve their profile information.
+
+---
+
+### HTTP Method
+**GET**
+
+---
+
+### Endpoint URL
+`/user/profile`
+
+---
+
+### Headers
+The request must include the following header for authentication:
+
+| Header            | Value   | Required | Description                                    |
+|--------------------|---------|----------|------------------------------------------------|
+| `Authorization`   | Bearer {token} | Yes  | A valid JWT token obtained after login.       |
+
+---
+
+### Responses
+
+| Status Code | Description                          |
+|-------------|--------------------------------------|
+| 200         | Returns user profile information.    |
+| 401         | Unauthorized. Token is missing or invalid. |
+| 500         | Internal server error.              |
+
+#### Example Success Response
+**Status Code:** 200
+```json
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john.doe@example.com"
+}
+```
+
+#### Example Error Response
+**Status Code:** 401
+```json
+{
+  "message": "Unauthorized"
+}
+
+---
+
+### Notes
+- Ensure a valid token is provided in the `Authorization` header.
+- This endpoint is protected and requires authentication.
+
+---
+
+## /user/logout Endpoint
+
+### Description
+The `/user/logout` endpoint allows authenticated users to log out by clearing the JWT token from cookies and blacklisting it to prevent reuse.
+
+---
+
+### HTTP Method
+**GET**
+
+---
+
+### Endpoint URL
+`/user/logout`
+
+---
+
+### Headers
+The request must include the following header for authentication:
+
+| Header            | Value   | Required | Description                                    |
+|--------------------|---------|----------|------------------------------------------------|
+| `Authorization`   | Bearer {token} | Yes  | A valid JWT token obtained after login.       |
+
+---
+
+### Responses
+
+| Status Code | Description                          |
+|-------------|--------------------------------------|
+| 200         | User logged out successfully.        |
+| 401         | Unauthorized. Token is missing or invalid. |
+| 500         | Internal server error.              |
+
+#### Example Success Response
+**Status Code:** 200
+```json
+{
+  "message": "Logout successfully"
+}
+```
+
+#### Example Error Response
+**Status Code:** 401
+```json
+{
+  "message": "Unauthorized"
+}
+
+---
+
+### Notes
+- This endpoint clears the token from cookies and blacklists it to prevent reuse.
+- Ensure a valid token is provided in the `Authorization` header.
+- This endpoint is protected and requires authentication.
 
 ---
