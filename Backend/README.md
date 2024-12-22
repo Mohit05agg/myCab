@@ -291,3 +291,131 @@ The request must include the following header for authentication:
 - This endpoint is protected and requires authentication.
 
 ---
+# Captain Routes
+
+## Overview
+The Captain Routes handle the operations related to captain registration. The routes use Express.js for routing and `express-validator` for input validation. This documentation provides details about the available routes, their request structure, and expected responses.
+
+---
+
+## Routes
+
+### 1. Register a Captain
+
+**Endpoint:**
+```
+POST /api/captain/register
+```
+
+**Description:**
+Registers a new captain with vehicle details and validates the input data.
+
+**Request Body:**
+The body of the request should be in JSON format and include the following fields:
+
+| Field                      | Type     | Validation                                       | Description                              |
+|----------------------------|----------|-------------------------------------------------|------------------------------------------|
+| `email`                   | String   | Must be a valid email address                  | Email of the captain                     |
+| `fullname.firstname`       | String   | Minimum 3 characters                           | First name of the captain                |
+| `fullname.lastname`        | String   | (Optional)                                     | Last name of the captain                 |
+| `password`                 | String   | Minimum 6 characters                           | Password for captain authentication      |
+| `vehicle.color`            | String   | Minimum 3 characters                           | Color of the captain's vehicle           |
+| `vehicle.plate`            | String   | Minimum 3 characters                           | License plate of the captain's vehicle   |
+| `vehicle.capacity`         | Integer  | Minimum 1 character                            | Seating capacity of the captain's vehicle|
+| `vehicle.vehicleType`      | String   | Minimum 3 characters                           | Type of the captain's vehicle            |
+
+**Validation Rules:**
+- Uses `express-validator` to ensure proper validation of all fields.
+- Returns appropriate error messages for invalid fields.
+
+**Example Request:**
+```json
+{
+  "email": "captain@example.com",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "password": "password123",
+  "vehicle": {
+    "color": "Blue",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "Sedan"
+  }
+}
+```
+
+**Example Response:**
+- Success:
+```json
+{
+  "message": "Captain registered successfully",
+  "data": {
+    "id": "unique_captain_id",
+    "email": "captain@example.com"
+  }
+}
+```
+- Validation Error:
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid Email",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+---
+
+## Service Details
+
+The `captain.service.js` file handles the logic for creating a new captain in the database. It validates that all required fields are provided and throws an error if any field is missing.
+
+### Function: `createCaptain`
+
+**Description:**
+Creates a new captain record in the database.
+
+**Parameters:**
+| Parameter      | Type   | Description                              |
+|----------------|--------|------------------------------------------|
+| `firstname`    | String | First name of the captain                |
+| `lastname`     | String | Last name of the captain (optional)      |
+| `email`        | String | Email of the captain                     |
+| `password`     | String | Password for captain authentication      |
+| `color`        | String | Color of the captain's vehicle           |
+| `plate`        | String | License plate of the captain's vehicle   |
+| `capacity`     | Integer| Seating capacity of the captain's vehicle|
+| `vehicleType`  | String | Type of the captain's vehicle            |
+
+**Validation:**
+Throws an error if any required field is missing.
+
+**Example Usage:**
+```javascript
+const { createCaptain } = require('./captain.service');
+
+createCaptain({
+  firstname: "John",
+  lastname: "Doe",
+  email: "captain@example.com",
+  password: "password123",
+  color: "Blue",
+  plate: "ABC123",
+  capacity: 4,
+  vehicleType: "Sedan"
+})
+  .then(captain => console.log(captain))
+  .catch(err => console.error(err));
+```
+
+**Returns:**
+An object representing the created captain record.
+
+**Error Handling:**
+If a required field is missing, the function will throw an error with the message `"All fields are required"`. Ensure all fields are provided before calling this function.
