@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {body} = require("express-validator")
 const userController = require('../controllers/user.controller');
-const authMiddleware = require('../middlewares/auth')
+const authMiddleware = require('../middleware/auth.middleware');
 
 // 3 details we r going to validate email , firstname, password
 

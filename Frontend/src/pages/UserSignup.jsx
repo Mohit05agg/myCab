@@ -1,6 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import axios from 'axios' // used to make api calls to the server side i.e that integrating frontend with backend
+import { UserDataContext } from '../context/userContext'
 
 const UserSignup = () => {
     const [email,setemail] = useState('')
@@ -9,17 +11,35 @@ const UserSignup = () => {
     const [lastName,setlastName] = useState('')
     const [userData,setUserData] = useState({})
     
-    const submitHandler = (e) => {
+    const navigate = useNavigate() // useNavigate hooke -used to navigate to different pages
+    const {user,setUser} = React.useContext(UserDataContext)
+
+    const submitHandler = async(e) => {
         e.preventDefault();
-        setUserData({
-            fullName:{
-                firstName:firstName,
-                lastName:lastName
-            },
-            email:email,
-            password:password,
-    
-        })
+        const newUser = {
+          fullname:{
+              firstname: firstName,
+              lastname: lastName
+
+          },
+            email: email,
+           password: password,
+          
+        };
+        console.log(`${import.meta.env.VITE_BASE_URL}/users/register`);
+
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser)
+
+    if(response.status === 201){// if the status is 201 then the user is created successfully
+        const data = response.data
+        
+        setUser(data.user) // set the user data in the context
+        localStorage.setItem('token',data.token) // set the token in the local storage
+        navigate('/home') // navigate to login page
+    }
+
+
        setemail('')
        setpassword('')
        setfirstName('')
@@ -74,7 +94,7 @@ const UserSignup = () => {
            placeholder='password' />
      <button
        className='bg-[#111] text-white font-semibold -mb-7 rounded px-4 py-2  w-full text-base placeholder:text-base'
-       >Login</button>
+       >Create account</button>
        <Link to='/login' className='text-center block mt-5 text-blue-600'>Already have an account? Login here</Link>
      </form>
 

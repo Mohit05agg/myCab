@@ -1,7 +1,7 @@
 const userModel = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const blacklistedTokenModel = require('../models/blacklistedToken.model');
+const blackListTokenModel = require('../models/blacklistToken.model');
 const captainModel = require('../models/captain.model');
 
 // middleware for chehc if user is authenticated or not
